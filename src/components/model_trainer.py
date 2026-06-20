@@ -55,12 +55,42 @@ class ModelTraining:
                 "AdaBoost Regressor": AdaBoostRegressor(),
             }
 
+            params = {
+                "Decision Tree": {
+                    'criterion' : ['squared_error', 'absolute_error'],
+                },
+                "Random Forest": {
+                    'n_estimators': [16, 32]
+                },
+                "Gradient Boosting": {
+                    'learning_rate': [.1, .01],
+                    'n_estimators': [16, 32]
+                },
+                "Linear Regression": {},
+                "K-Neighbors": {
+                    'n_neighbors': [5, 7],
+                },
+                "XGBoost": {
+                    'learning_rate': [.1, .01],
+                    'n_estimators': [16, 32]
+                },
+                "CatBoost Regressor": {
+                    'depth': [6, 8],
+                    'learning_rate': [0.01, 0.05],
+                    'iterations': [30, 50]
+                },
+                "AdaBoost Regressor": {
+                    'learning_rate': [.1, .01],
+                    'n_estimators': [8, 16]
+                }
+            }
+
             if XGBRegressor is not None:
                 models["XGBoost"] = XGBRegressor()
             if CatBoostRegressor is not None:
                 models["CatBoost Regressor"] = CatBoostRegressor(verbose=False)
 
-            model_report: dict = evaluate_models(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models)
+            model_report: dict = evaluate_models(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models,params=params)
             
             best_model_score = max(sorted(model_report.values()))
             best_model_name = list(model_report.keys())[list(model_report.values()).index(best_model_score)]
